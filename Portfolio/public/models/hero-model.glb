@@ -1,0 +1,3 @@
+loader.load('/models/hero-model.glb', (gltf) => {
+  scene.add(gltf.scene);
+});
