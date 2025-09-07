@@ -170,7 +170,7 @@ const Services = () => {
           <div className="text-center mb-12">
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Client Success Stories</h3>
             <p className="text-gray-600 max-w-3xl mx-auto">
-              Don't just take our word for it - hear what our clients have to say
+              Do not just take our word for it hear what our clients have to say
             </p>
           </div>
 
@@ -197,7 +197,7 @@ const Services = () => {
                     <p className="text-gray-600 text-sm">{client.role}, {client.company}</p>
                   </div>
                 </div>
-                <p className="text-gray-700 mb-4 italic">"{client.description}"</p>
+                <p className="text-gray-700 mb-4 italic">{client.description}</p>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -220,7 +220,7 @@ const Services = () => {
         >
           <h3 className="text-2xl md:text-3xl font-bold mb-4">Ready to transform your digital presence?</h3>
           <p className="text-indigo-100 max-w-2xl mx-auto mb-6">
-            Let's discuss how we can create a custom solution tailored to your business needs.
+            Let discuss how we can create a custom solution tailored to your business needs.
           </p>
           <button className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors shadow-lg">
             Schedule a Consultation

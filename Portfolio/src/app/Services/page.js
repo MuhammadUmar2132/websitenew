@@ -168,7 +168,7 @@ icon: "🐙",
 
                 {/* Feedback */}
                 <p className="text-gray-300 italic mb-4">
-                  "{testimonial.feedback}"
+                  {testimonial.feedback}
                 </p>
 
                 {/* Rating */}
