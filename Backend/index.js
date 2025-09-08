@@ -12,7 +12,7 @@ const app = express();
 // ✅ Use CORS before all middleware
 app.use(
   cors({
-    origin: 'http://localhost:3000', // Your frontend
+    origin: '*', // Your frontend
     credentials: true, // ✅ Must allow credentials for cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],

@@ -32,7 +32,7 @@ export default function Uploads() {
     formData.append('image', form.image);
 
     try {
-      const res = await fetch('https://port-backend-76o0.onrender.com/upload-photo', {
+      const res = await fetch('https://port-backend-a52w.onrender.com/upload-photo', {
         method: 'POST',
         body: formData
       });
