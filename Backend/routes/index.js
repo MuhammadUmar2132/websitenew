@@ -5,7 +5,7 @@ const authController = require("../controller/authController");
 const auth = require('../middlewares/auth');
 const upload = require('../middlewares/upload');
 const photoController = require('../controller/photo');
-const contactController = require('../controller/Contact');
+const contactController = require('../controller/contact');
 const validateContact = require('../middlewares/validateContact');
 
 // -------- User Auth --------

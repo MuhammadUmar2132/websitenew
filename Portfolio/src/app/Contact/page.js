@@ -127,7 +127,7 @@ const Contact = () => {
     setSubmitStatus(null);
     
     try {
-      const response = await fetch('http://localhost:8009/contact', {
+      const response = await fetch('https://port-backend-76o0.onrender.com/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

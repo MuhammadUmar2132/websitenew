@@ -1,4 +1,4 @@
-const Photo = require('../models/photo');
+const Photo = require('../models/Photo.js');
 const PhotoDTO = require('../dto/photo.dto.js');
 const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');

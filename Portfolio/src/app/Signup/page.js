@@ -170,7 +170,7 @@ export default function Signup() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const response = await fetch('http://localhost:8009/register', {
+        const response = await fetch('https://port-backend-76o0.onrender.com/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

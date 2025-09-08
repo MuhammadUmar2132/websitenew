@@ -26,7 +26,7 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch('http://localhost:8009/photos');
+        const res = await fetch('https://port-backend-76o0.onrender.com/photos');
         const data = await res.json();
 
         console.log("API Response:", data);
