@@ -29,7 +29,7 @@ const clients = [
     role: "Marketing Director",
     company: "TechNova Solutions",
     description: "This solution transformed our customer engagement metrics. The intuitive interface and powerful analytics helped us increase conversions by 42%.",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    avatar: "",
     logo: "TN"
   },
   {
@@ -38,7 +38,7 @@ const clients = [
     role: "CTO",
     company: "TechStart",
     description: "Implementation was seamless and the support team was exceptional. We reduced our operational costs by 30% while improving performance.",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    avatar: "",
     logo: "TS"
   },
   {
@@ -47,7 +47,7 @@ const clients = [
     role: "E-commerce Manager",
     company: "ShopGlobal",
     description: "The customizable features allowed us to tailor the platform perfectly to our needs. Our team adoption rate was 95% in the first week.",
-    avatar: "https://randomuser.me/api/portraits/women/63.jpg",
+    avatar: "",
     logo: "SG"
   },
   {
@@ -56,7 +56,7 @@ const clients = [
     role: "Founder",
     company: "GreenLeaf Organics",
     description: "Our new e-commerce platform increased online sales by 200% within the first quarter of launch.",
-    avatar: "https://randomuser.me/api/portraits/men/75.jpg",
+    avatar: "",
     logo: "GL"
   },
   {
@@ -65,7 +65,7 @@ const clients = [
     role: "Creative Director",
     company: "PixelPerfect Agency",
     description: "The custom CMS built for our agency has streamlined our workflow and improved client satisfaction significantly.",
-    avatar: "https://randomuser.me/api/portraits/women/25.jpg",
+    avatar: "",
     logo: "PP"
   }
 ];

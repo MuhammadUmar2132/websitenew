@@ -163,7 +163,7 @@ const Projects = () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:8009/photo/title/${encodeURIComponent(title)}`, {
+      const res = await fetch(`https://port-backend-a52w.onrender.com/photo/title/${encodeURIComponent(title)}`, {
         method: 'DELETE',
       });
 

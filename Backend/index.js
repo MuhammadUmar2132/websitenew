@@ -12,12 +12,16 @@ const app = express();
 // ✅ Use CORS before all middleware
 app.use(
   cors({
-    origin: '*', // Your frontend
-    credentials: true, // ✅ Must allow credentials for cookies
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
+    origin: [
+      "https://websitenew-g6yv.vercel.app", // ✅ your Vercel frontend
+      "http://localhost:3000"               // ✅ for local dev
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 // ✅ JSON + Cookies
 app.use(express.json({ limit: "50mb" }));
