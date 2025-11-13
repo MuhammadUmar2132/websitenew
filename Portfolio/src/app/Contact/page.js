@@ -15,6 +15,8 @@ const Contact = () => {
   const threeContainerRef = useRef(null);
   const frameRef = useRef(null);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   // Initialize Three.js scene
   useEffect(() => {
     if (!threeContainerRef.current) return;
@@ -127,7 +129,7 @@ const Contact = () => {
     setSubmitStatus(null);
     
     try {
-      const response = await fetch('https://port-backend-a52w.onrender.com/contact', {
+      const response = await fetch(`${API_URL}/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

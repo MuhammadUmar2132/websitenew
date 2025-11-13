@@ -20,6 +20,7 @@ export default function Uploads() {
       setForm({ ...form, [name]: value });
     }
   };
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ export default function Uploads() {
     formData.append('image', form.image);
 
     try {
-      const res = await fetch('https://port-backend-a52w.onrender.com/upload-photo', {
+      const res = await fetch(`${API_URL}/upload-photo`, {
         method: 'POST',
         body: formData
       });

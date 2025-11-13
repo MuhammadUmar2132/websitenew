@@ -15,6 +15,8 @@ export default function Login() {
   const router = useRouter();
   const canvasRef = useRef(null);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   // Three.js initialization
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -153,7 +155,7 @@ export default function Login() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const response = await fetch('https://port-backend-dncb.onrender.com/login', {
+        const response = await fetch(`${API_URL}/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

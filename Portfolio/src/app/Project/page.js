@@ -21,12 +21,13 @@ const Projects = () => {
   const rendererRef = useRef(null);
   const cameraRef = useRef(null);
   const frameRef = useRef(null);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   // Fetch projects from API
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch('https://port-backend-a52w.onrender.com/photos');
+        const res = await fetch(`${API_URL}/photos`);
         const data = await res.json();
 
         console.log("API Response:", data);
@@ -163,7 +164,7 @@ const Projects = () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`https://port-backend-a52w.onrender.com/photo/title/${encodeURIComponent(title)}`, {
+      const res = await fetch(`${API_URL}/photo/title/${encodeURIComponent(title)}`, {
         method: 'DELETE',
       });
 

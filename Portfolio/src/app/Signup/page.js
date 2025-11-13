@@ -18,6 +18,8 @@ export default function Signup() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   // Three.js initialization
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -170,7 +172,7 @@ export default function Signup() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const response = await fetch('https://port-backend-a52w.onrender.com/register', {
+        const response = await fetch(`${API_URL}/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
