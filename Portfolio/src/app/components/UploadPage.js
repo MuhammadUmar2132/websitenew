@@ -33,7 +33,8 @@ export default function UploadPage() {
     formData.append('image', form.image);
 
     try {
-      const res = await fetch('http://localhost:8000/upload-photo', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8009';
+      const res = await fetch(`${API_URL}/upload-photo`, {
         method: 'POST',
         body: formData,
       });

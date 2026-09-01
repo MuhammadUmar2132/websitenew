@@ -60,6 +60,21 @@ exports.getAllPhotos = async (req, res) => {
   }
 };
 
+// GET PHOTO BY ID
+exports.getPhotoById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const photo = await Photo.findById(id);
+    if (!photo) {
+      return res.status(404).json({ message: 'Photo not found' });
+    }
+    res.status(200).json(new PhotoDTO(photo));
+  } catch (error) {
+    console.error('Error fetching photo by id:', error);
+    res.status(500).json({ message: 'Failed to retrieve photo', error: error.message });
+  }
+};
+
 // UPDATE PHOTO
 exports.updatePhoto = async (req, res) => {
   try {

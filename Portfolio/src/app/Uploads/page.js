@@ -20,7 +20,7 @@ export default function Uploads() {
       setForm({ ...form, [name]: value });
     }
   };
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8009';
 
   const handleSubmit = async (e) => {
     e.preventDefault();

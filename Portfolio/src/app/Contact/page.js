@@ -15,7 +15,7 @@ const Contact = () => {
   const threeContainerRef = useRef(null);
   const frameRef = useRef(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8009';
 
   // Initialize Three.js scene
   useEffect(() => {

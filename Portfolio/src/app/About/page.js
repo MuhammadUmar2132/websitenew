@@ -8,14 +8,14 @@ import Image from "next/image";
 
 const About = () => {
   const skills = [
-    { name: "Next.js", level: 98 },
-    { name: "React", level: 90 },
-    { name: "Tailwind CSS", level: 95 },
-    { name: "Node.js", level: 80 },
-    { name: "MongoDB", level: 75 },
-    { name: "AWS", level: 85 },
-    { name: "Docker", level: 80 },
-    { name: "Socket.IO", level: 70 },
+    { name: "React.js", level: 95 },
+    { name: "Node.js & Express.js", level: 92 },
+    { name: "MongoDB & PostgreSQL", level: 90 },
+    { name: "Next.js & TypeScript", level: 90 },
+    { name: "REST APIs & JWT Auth", level: 95 },
+    { name: "Tailwind CSS & HTML5/CSS3", level: 95 },
+    { name: "Redux / Redux Toolkit", level: 88 },
+    { name: "Git/GitHub, Docker & AWS", level: 85 },
   ];
 
   const canvasRef = useRef(null);
@@ -204,16 +204,10 @@ const About = () => {
           >
             <h3 className="text-2xl font-semibold text-white mb-4">Who am I?</h3>
             <p className="text-white mb-6">
-              I&apos;m a passionate web developer with 1 year of experience
-              creating modern, responsive, and user-friendly websites and
-              applications. I specialize in JavaScript technologies including
-              React, Next.js, and Node.js.
+              I&apos;m a dedicated <span className="text-indigo-400 font-semibold">MERN Stack & Full Stack Developer</span> with 3.5 years of professional experience building scalable, responsive, and high-performance web applications. I specialize in developing interactive user interfaces with React.js & Next.js, and robust backend services and RESTful APIs using Node.js & Express.js.
             </p>
             <p className="text-white mb-8">
-              My approach combines technical expertise with creative
-              problem-solving to deliver high-quality solutions that meet client
-              needs. I&apos;m dedicated to continuous learning and staying
-              up-to-date with the latest industry trends.
+              My expertise covers database architecture & optimization with MongoDB and PostgreSQL (SQL & NoSQL), secure authentication (JWT), third-party API and payment gateway integrations, TypeScript, Redux Toolkit, and containerized deployments using Docker and AWS. I focus on writing clean, maintainable code, debugging and troubleshooting, and collaborating effectively using Git & GitHub.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -19,28 +19,28 @@ const Services = () => {
 
   const services = [
     {
-      title: "Full Stack Developement",
+      title: "MERN & Full Stack Development",
       description:
-        "Building responsive, fast, and scalable web applications tailored to your needs.",
+        "Developing and maintaining end-to-end web applications with React, Node.js, Express.js, MongoDB & PostgreSQL.",
       icon: "🌐",
     },
     {
-      title: "Frontend Developement",
+      title: "Frontend & UI/UX Design",
       description:
-        "Crafting intuitive and user-friendly designs with modern tools and practices.",
+        "Building responsive, interactive UIs with React.js, Next.js, Tailwind CSS, TypeScript, and Redux Toolkit.",
       icon: "🎨",
     },
     {
-      title: "Backend Development",
+      title: "Backend & RESTful APIs",
       description:
-        "Creating robust, secure, and scalable server-side applications and APIs.",
+        "Developing scalable backend services, RESTful APIs, JWT authentication, and third-party integrations.",
       icon: "⚙️",
     },
     {
-      title: "GitHub",
-description: "Managing repositories, version control, and collaborative development.",
-icon: "🐙",
-
+      title: "Database & Cloud DevOps",
+      description:
+        "Designing MongoDB & PostgreSQL databases, query optimization, Docker containerization, AWS cloud, and Git version control.",
+      icon: "🚀",
     },
   ];
 

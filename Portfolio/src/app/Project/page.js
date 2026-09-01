@@ -21,7 +21,7 @@ const Projects = () => {
   const rendererRef = useRef(null);
   const cameraRef = useRef(null);
   const frameRef = useRef(null);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8009';
 
   // Fetch projects from API
   useEffect(() => {
@@ -158,30 +158,6 @@ const Projects = () => {
     };
   }, []);
 
-  // DELETE handler
-  const handleDelete = async (title) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete "${title}"?`);
-    if (!confirmDelete) return;
-
-    try {
-      const res = await fetch(`${API_URL}/photo/title/${encodeURIComponent(title)}`, {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to delete project');
-      }
-
-      // Remove from UI
-      setProjects(prev => prev.filter(project => project.title !== title));
-      alert(`Project "${title}" deleted successfully.`);
-    } catch (error) {
-      console.error('Delete error:', error);
-      alert('Failed to delete project: ' + error.message);
-    }
-  };
-
   return (
     <section id="projects" className="py-20 bg-gray-900 relative overflow-hidden">
       {/* Three.js Background */}
@@ -303,7 +279,7 @@ const Projects = () => {
                       <div className="absolute inset-0 opacity-10 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
                       
                       <p className="text-gray-300 mb-4 line-clamp-3 relative z-10">{project.description}</p>
-                      <div className="flex justify-between items-center relative z-10">
+                      <div className="flex items-center relative z-10">
                         <motion.a 
                           href={project.link} 
                           className="text-white hover:text-indigo-400 font-medium inline-flex items-center transition-colors group/link"
@@ -315,14 +291,6 @@ const Projects = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                           </svg>
                         </motion.a>
-                        <motion.button
-                          onClick={() => handleDelete(project.title)}
-                          className="text-red-400 hover:text-red-300 text-sm px-3 py-1 rounded-lg transition-colors border border-red-400/20 hover:bg-red-400/10"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          Delete
-                        </motion.button>
                       </div>
                     </div>
                     
@@ -339,35 +307,6 @@ const Projects = () => {
             <div className="swiper-pagination mt-6 relative"></div>
           </div>
         )}
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.7 }}
-          className="text-center mt-16"
-        >
-          <motion.button 
-            onClick={() => router.push('/Uploads')}
-            className="relative bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all shadow-lg hover:shadow-indigo-500/30 overflow-hidden group"
-            whileHover={{ 
-              scale: 1.05,
-              transition: { duration: 0.3 }
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span className="relative z-10">Add New Project</span>
-            
-            {/* Button shine effect */}
-            <div className="absolute inset-0 -z-0">
-              <div className="absolute inset-0 bg-indigo-600"></div>
-              <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              {/* Shine animation */}
-              <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shine transition-all duration-700"></div>
-            </div>
-          </motion.button>
-        </motion.div>
       </div>
 
       <style jsx global>{`

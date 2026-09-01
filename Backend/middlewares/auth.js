@@ -3,46 +3,56 @@ const User = require('../models/user');
 const UserDTO = require('../dto/user');
 
 const auth = async (req, res, next) => {
-    try{
-        // 1. refresh, access token validation
-    const {refreshToken, accessToken} = req.cookies;
+    try {
+        let accessToken = req.cookies?.accessToken;
 
-    if (!refreshToken || !accessToken){
-        const error = {
-            status: 401,
-            message: 'Unauthorized'
+        // Also allow Bearer token from headers
+        const authHeader = req.headers.authorization;
+        if (!accessToken && authHeader && authHeader.startsWith('Bearer ')) {
+            accessToken = authHeader.split(' ')[1];
         }
 
-        return next(error)
-    }
+        if (!accessToken) {
+            return res.status(401).json({ message: 'Unauthorized: No token provided' });
+        }
 
-    let _id;
+        let _id;
+        try {
+            _id = JWTService.verifyAccessToken(accessToken)._id;
+        } catch (error) {
+            return res.status(401).json({ message: 'Unauthorized: Invalid or expired token' });
+        }
 
-    try{
-        _id = JWTService.verifyAccessToken(accessToken)._id;
-    }
-    catch(error){
+        let user;
+        try {
+            user = await User.findById(_id);
+            if (!user) {
+                return res.status(401).json({ message: 'Unauthorized: User not found' });
+            }
+        } catch (error) {
+            return next(error);
+        }
+
+        const userDto = new UserDTO(user);
+        req.user = userDto;
+
+        next();
+    } catch (error) {
         return next(error);
     }
+};
 
-    let user;
-
-    try{
-        user = await User.findOne({_id: _id});
-    }
-    catch(error){
+const adminAuth = async (req, res, next) => {
+    try {
+        if (!req.user || req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Forbidden: Admin access required' });
+        }
+        next();
+    } catch (error) {
         return next(error);
     }
-
-    const userDto = new UserDTO(user);
-
-    req.user = userDto;
-
-    next();
-    }
-    catch(error){
-        return next(error);
-    }
-}
+};
 
 module.exports = auth;
+module.exports.auth = auth;
+module.exports.adminAuth = adminAuth;

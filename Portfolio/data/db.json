@@ -1,0 +1,179 @@
+{
+  "admin": {
+    "id": "admin-1",
+    "name": "Muhammad Umar",
+    "username": "admin",
+    "email": "admin@portfolio.com",
+    "password": "admin123",
+    "role": "admin",
+    "avatar": "/p.jpg",
+    "createdAt": "2026-09-01T16:48:10.160Z"
+  },
+  "users": [
+    {
+      "id": "usr-1",
+      "name": "Muhammad Umar",
+      "username": "admin",
+      "email": "admin@portfolio.com",
+      "password": "admin123",
+      "role": "admin",
+      "status": "active",
+      "createdAt": "2026-01-15T10:00:00.000Z"
+    },
+    {
+      "id": "usr-2",
+      "name": "Sarah Ahmed",
+      "username": "sarah_dev",
+      "email": "sarah@example.com",
+      "password": "user1234",
+      "role": "user",
+      "status": "active",
+      "createdAt": "2026-02-10T14:30:00.000Z"
+    },
+    {
+      "id": "usr-3",
+      "name": "Ali Khan",
+      "username": "alikhan",
+      "email": "ali@example.com",
+      "password": "user1234",
+      "role": "user",
+      "status": "active",
+      "createdAt": "2026-03-01T09:15:00.000Z"
+    },
+    {
+      "id": "usr-4",
+      "name": "John Doe",
+      "username": "johndoe",
+      "email": "john@client.com",
+      "password": "user1234",
+      "role": "user",
+      "status": "inactive",
+      "createdAt": "2026-04-12T16:45:00.000Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "title": "MERN Stack E-Commerce Platform",
+      "description": "A full-featured multi-vendor e-commerce platform with payment gateway integration, real-time inventory management, JWT auth, and admin dashboard.",
+      "category": "Full Stack",
+      "tags": [
+        "React.js",
+        "Node.js",
+        "Express.js",
+        "MongoDB",
+        "Redux",
+        "Stripe"
+      ],
+      "link": "https://github.com/mrumar",
+      "imageUrl": "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
+      "status": "Published",
+      "featured": true,
+      "createdAt": "2026-01-20T11:00:00.000Z"
+    },
+    {
+      "id": "proj-2",
+      "title": "AI-Powered SaaS Analytics Dashboard",
+      "description": "Interactive analytics dashboard built with Next.js 15, TypeScript, PostgreSQL, Prisma, and Tailwind CSS with real-time data visualization.",
+      "category": "Frontend & UI",
+      "tags": [
+        "Next.js",
+        "TypeScript",
+        "PostgreSQL",
+        "Tailwind CSS",
+        "Chart.js"
+      ],
+      "link": "https://github.com/mrumar",
+      "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+      "status": "Published",
+      "featured": true,
+      "createdAt": "2026-02-15T15:20:00.000Z"
+    },
+    {
+      "id": "proj-3",
+      "title": "Real-Time Team Collaboration & Chat",
+      "description": "High-performance team messaging app featuring WebSockets (Socket.IO), Redis caching, MongoDB, and secure end-to-end encrypted messaging.",
+      "category": "Backend & APIs",
+      "tags": [
+        "React.js",
+        "Node.js",
+        "Socket.IO",
+        "MongoDB",
+        "Docker"
+      ],
+      "link": "https://github.com/mrumar",
+      "imageUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
+      "status": "Published",
+      "featured": true,
+      "createdAt": "2026-03-05T08:30:00.000Z"
+    },
+    {
+      "id": "proj-4",
+      "title": "Cloud DevOps & Container Orchestration UI",
+      "description": "Centralized cloud management console for deploying and monitoring Docker containers and AWS EC2 instances with CI/CD pipelines.",
+      "category": "Cloud & DevOps",
+      "tags": [
+        "Node.js",
+        "Docker",
+        "AWS",
+        "Express.js",
+        "PostgreSQL"
+      ],
+      "link": "https://github.com/mrumar",
+      "imageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+      "status": "Published",
+      "featured": false,
+      "createdAt": "2026-04-02T13:10:00.000Z"
+    }
+  ],
+  "leads": [
+    {
+      "id": "lead-1",
+      "name": "Sarah Ahmed",
+      "email": "sarah@techcorp.com",
+      "phone": "+92 300 1234567",
+      "subject": "MERN Stack Web Application Project",
+      "message": "Hello Muhammad! We are looking for an experienced MERN Stack Developer to build our enterprise logistics management platform.",
+      "status": "New",
+      "budget": "$2,500 - $5,000",
+      "notes": "Initial inquiry via portfolio contact form.",
+      "createdAt": "2026-04-18T09:30:00.000Z"
+    },
+    {
+      "id": "lead-2",
+      "name": "Ali Khan",
+      "email": "ali@digitalagency.io",
+      "phone": "+92 321 9876543",
+      "subject": "Next.js & REST API Consultation",
+      "message": "Hi Umar, we loved your portfolio. We need help optimizing our MongoDB queries and migrating our dashboard to Next.js with TypeScript.",
+      "status": "Contacted",
+      "budget": "$1,500 - $3,000",
+      "notes": "Sent initial response email with portfolio samples.",
+      "createdAt": "2026-04-19T14:15:00.000Z"
+    },
+    {
+      "id": "lead-3",
+      "name": "Michael Brown",
+      "email": "michael@fintech.co",
+      "phone": "+1 415 555 0199",
+      "subject": "Payment Gateway & PostgreSQL Integration",
+      "message": "Need a developer for robust Stripe and PayPal integrations with custom webhook handling and PostgreSQL database design.",
+      "status": "In Progress",
+      "budget": "$4,000+",
+      "notes": "Discovery call scheduled for Friday.",
+      "createdAt": "2026-04-20T17:40:00.000Z"
+    },
+    {
+      "id": "lead-4",
+      "name": "Zayn Malik",
+      "email": "zayn@startup.pk",
+      "phone": "+92 333 4567890",
+      "subject": "Full Stack MVP Development",
+      "message": "We have a wireframe ready and want a working prototype built in React.js and Node.js within 4 weeks.",
+      "status": "Closed",
+      "budget": "$2,000",
+      "notes": "Project completed and delivered.",
+      "createdAt": "2026-04-10T11:00:00.000Z"
+    }
+  ]
+}

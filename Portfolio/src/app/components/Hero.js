@@ -151,32 +151,56 @@ const Hero = () => {
             creating immersive web experiences.
           </motion.p>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
             <motion.button
               whileHover={{
                 scale: 1.05,
-                boxShadow: "0 0 15px rgba(124, 58, 237, 0.6)",
+                boxShadow: "0 0 25px rgba(99, 102, 241, 0.6)",
               }}
               whileTap={{ scale: 0.95 }}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-all relative overflow-hidden"
+              onClick={() => {
+                const projectsSection = document.getElementById("projects");
+                if (projectsSection) {
+                  projectsSection.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  router.push("/Project");
+                }
+              }}
+              className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-500 text-white px-8 py-3.5 rounded-xl text-lg font-semibold transition-all shadow-lg hover:shadow-indigo-500/40 overflow-hidden cursor-pointer group"
             >
-              <span className="relative z-10">View My Work</span>
-              <motion.span
-                className="absolute inset-0 bg-indigo-500 rounded-lg z-0"
-                initial={{ scale: 0 }}
-                whileHover={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-              />
+              <span className="relative z-10 flex items-center gap-2">
+                View My Work
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </span>
             </motion.button>
 
             <motion.button
               whileHover={{
                 scale: 1.05,
-                boxShadow: "0 0 15px rgba(255, 255, 255, 0.4)",
+                boxShadow: "0 0 20px rgba(129, 140, 248, 0.4)",
               }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => router.push("/Contact")}
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 rounded-lg text-lg font-medium transition-all"
+              onClick={() => {
+                const contactSection = document.getElementById("contact");
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  router.push("/Contact");
+                }
+              }}
+              className="bg-gray-800/60 hover:bg-indigo-600/30 border-2 border-indigo-400/60 hover:border-indigo-400 text-white px-8 py-3.5 rounded-xl text-lg font-semibold transition-all backdrop-blur-sm cursor-pointer shadow-md"
             >
               Contact Me
             </motion.button>
@@ -186,12 +210,21 @@ const Hero = () => {
 
       {/* Scroll indicator */}
       <motion.div
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10"
+        animate={{ y: [0, -15, 0] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        onClick={() => {
+          const aboutSection = document.getElementById("about");
+          if (aboutSection) {
+            aboutSection.scrollIntoView({ behavior: "smooth" });
+          } else {
+            router.push("/About");
+          }
+        }}
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 cursor-pointer text-indigo-400 hover:text-white transition-colors"
+        title="Scroll Down"
       >
         <svg
-          className="w-8 h-8 text-white"
+          className="w-8 h-8"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
