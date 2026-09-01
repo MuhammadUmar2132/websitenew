@@ -1,27 +1,27 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import * as THREE from 'three';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-
 const Projects = () => {
-  const router = useRouter();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [hoveredCard, setHoveredCard] = useState(null);
+
   const threeContainerRef = useRef(null);
-  const sceneRef = useRef(null);
-  const rendererRef = useRef(null);
-  const cameraRef = useRef(null);
   const frameRef = useRef(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8009';
+
+  const categories = [
+    { id: 'all', label: 'All Projects' },
+    { id: 'web', label: 'Web Applications' },
+    { id: 'fullstack', label: 'Full Stack' },
+    { id: 'ui', label: 'UI / UX Design' },
+  ];
 
   // Fetch projects from API
   useEffect(() => {
@@ -29,12 +29,8 @@ const Projects = () => {
       try {
         const res = await fetch(`${API_URL}/photos`);
         const data = await res.json();
-
-        console.log("API Response:", data);
-
-        // Handle both array and object responses safely
         const projectList = Array.isArray(data) ? data : data?.projects || [];
-        setProjects(projectList.slice(0, 6));
+        setProjects(projectList);
       } catch (error) {
         console.error('Error fetching projects:', error);
       } finally {
@@ -43,87 +39,88 @@ const Projects = () => {
     };
 
     fetchProjects();
-  }, []);
+  }, [API_URL]);
 
-  // Initialize Three.js scene
+  // Subtle Three.js Geometric Mesh in Background
   useEffect(() => {
-    if (!threeContainerRef.current) return;
+    const container = threeContainerRef.current;
+    if (!container) return;
 
-    // Initialize scene
     const scene = new THREE.Scene();
-    sceneRef.current = scene;
-
-    // Initialize camera
     const camera = new THREE.PerspectiveCamera(
-      75,
-      threeContainerRef.current.offsetWidth / threeContainerRef.current.offsetHeight,
+      60,
+      container.offsetWidth / container.offsetHeight,
       0.1,
       1000
     );
-    camera.position.z = 5;
-    cameraRef.current = camera;
+    camera.position.z = 6;
 
-    // Initialize renderer
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(
-      threeContainerRef.current.offsetWidth,
-      threeContainerRef.current.offsetHeight
-    );
-    renderer.setClearColor(0x000000, 0);
-    threeContainerRef.current.appendChild(renderer.domElement);
-    rendererRef.current = renderer;
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
 
-    // Add floating geometric elements
-    const geometry = new THREE.IcosahedronGeometry(1, 0);
-    const material = new THREE.MeshPhongMaterial({
-      color: 0x4f46e5, // indigo-600
-      shininess: 100,
-      emissive: 0x372f85,
+    // Floating Ring & Octahedrons
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const torusGeo = new THREE.TorusGeometry(3.5, 0.05, 16, 100);
+    const torusMat = new THREE.MeshBasicMaterial({
+      color: 0x6366f1,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.25,
+      wireframe: true,
+    });
+    const torus = new THREE.Mesh(torusGeo, torusMat);
+    group.add(torus);
+
+    const particleCount = 40;
+    const particleGeo = new THREE.OctahedronGeometry(0.2, 0);
+    const particleMat = new THREE.MeshStandardMaterial({
+      color: 0x818cf8,
+      roughness: 0.4,
+      metalness: 0.8,
+      transparent: true,
+      opacity: 0.6,
     });
 
-    const shapes = [];
-    for (let i = 0; i < 15; i++) {
-      const mesh = new THREE.Mesh(geometry, material.clone());
-      mesh.position.x = (Math.random() - 0.5) * 10;
-      mesh.position.y = (Math.random() - 0.5) * 10;
-      mesh.position.z = (Math.random() - 0.5) * 5;
-      mesh.rotation.x = Math.random() * Math.PI;
-      mesh.rotation.y = Math.random() * Math.PI;
-      mesh.scale.setScalar(Math.random() * 0.7 + 0.3);
-      scene.add(mesh);
-      shapes.push(mesh);
+    const particles = [];
+    for (let i = 0; i < particleCount; i++) {
+      const p = new THREE.Mesh(particleGeo, particleMat.clone());
+      p.position.set(
+        (Math.random() - 0.5) * 14,
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 6
+      );
+      p.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+      const scale = Math.random() * 0.8 + 0.3;
+      p.scale.set(scale, scale, scale);
+      p.userData = {
+        rotSpeedX: (Math.random() - 0.5) * 0.01,
+        rotSpeedY: (Math.random() - 0.5) * 0.01,
+        floatSpeed: Math.random() * 0.002 + 0.001,
+        seed: Math.random() * 100,
+      };
+      group.add(p);
+      particles.push(p);
     }
 
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    // Add directional light
-    const directionalLight = new THREE.DirectionalLight(0x4f46e5, 1);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
+    const pointLight = new THREE.PointLight(0xa855f7, 2, 50);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
 
-    // Add point lights
-    const pointLight1 = new THREE.PointLight(0x818cf8, 1, 100); // indigo-400
-    pointLight1.position.set(10, 10, 10);
-    scene.add(pointLight1);
-
-    const pointLight2 = new THREE.PointLight(0xc7d2fe, 1, 100); // indigo-200
-    pointLight2.position.set(-10, -10, -10);
-    scene.add(pointLight2);
-
-    // Animation
     const animate = () => {
       frameRef.current = requestAnimationFrame(animate);
+      torus.rotation.x += 0.001;
+      torus.rotation.y += 0.002;
 
-      shapes.forEach((shape, i) => {
-        shape.rotation.x += 0.005 * (i % 3 === 0 ? 1 : -1);
-        shape.rotation.y += 0.007 * (i % 2 === 0 ? 1 : -1);
-        
-        // Float up and down gently
-        shape.position.y += Math.sin(Date.now() * 0.001 + i) * 0.002;
+      particles.forEach((p) => {
+        p.rotation.x += p.userData.rotSpeedX;
+        p.rotation.y += p.userData.rotSpeedY;
+        p.position.y += Math.sin(Date.now() * 0.001 + p.userData.seed) * p.userData.floatSpeed;
       });
 
       renderer.render(scene, camera);
@@ -131,199 +128,429 @@ const Projects = () => {
 
     animate();
 
-    // Handle resize
     const handleResize = () => {
-      if (!threeContainerRef.current || !camera || !renderer) return;
-      
-      camera.aspect = threeContainerRef.current.offsetWidth / threeContainerRef.current.offsetHeight;
+      if (!container || !camera || !renderer) return;
+      camera.aspect = container.offsetWidth / container.offsetHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(
-        threeContainerRef.current.offsetWidth,
-        threeContainerRef.current.offsetHeight
-      );
+      renderer.setSize(container.offsetWidth, container.offsetHeight);
     };
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
       if (renderer) {
         renderer.dispose();
-        if (threeContainerRef.current && renderer.domElement) {
-          threeContainerRef.current.removeChild(renderer.domElement);
+        if (container && renderer.domElement && container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
         }
       }
     };
   }, []);
 
+  // Filter projects by search and category
+  const filteredProjects = projects.filter((p) => {
+    const titleMatch = p.title?.toLowerCase().includes(searchQuery.toLowerCase());
+    const descMatch = p.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = titleMatch || descMatch;
+
+    if (!matchesSearch) return false;
+    if (activeCategory === 'all') return true;
+    if (activeCategory === 'web') return p.title?.toLowerCase().includes('web') || p.tags?.some((t) => t.toLowerCase().includes('web') || t.toLowerCase().includes('react') || t.toLowerCase().includes('next'));
+    if (activeCategory === 'fullstack') return p.title?.toLowerCase().includes('stack') || p.tags?.some((t) => t.toLowerCase().includes('node') || t.toLowerCase().includes('express') || t.toLowerCase().includes('api'));
+    if (activeCategory === 'ui') return p.title?.toLowerCase().includes('ui') || p.title?.toLowerCase().includes('design') || p.tags?.some((t) => t.toLowerCase().includes('ui') || t.toLowerCase().includes('tailwind'));
+    return true;
+  });
+
+  const featuredProject = filteredProjects.length > 0 ? filteredProjects[0] : null;
+  const gridProjects = filteredProjects.length > 1 ? filteredProjects.slice(1) : [];
+
   return (
-    <section id="projects" className="py-20 bg-gray-900 relative overflow-hidden">
-      {/* Three.js Background */}
-      <div 
-        ref={threeContainerRef} 
-        className="absolute inset-0 z-0 opacity-20"
-        style={{ height: '100%' }}
+    <section id="projects" className="py-24 bg-gray-950 text-gray-100 relative overflow-hidden">
+      {/* Background 3D Canvas */}
+      <div
+        ref={threeContainerRef}
+        className="absolute inset-0 z-0 opacity-30 pointer-events-none"
       />
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div 
+
+      {/* Decorative Glow Orbs */}
+      <div className="absolute top-1/4 -left-48 w-96 h-96 bg-indigo-600/15 rounded-full blur-[128px] pointer-events-none"></div>
+      <div className="absolute bottom-1/4 -right-48 w-96 h-96 bg-purple-600/15 rounded-full blur-[128px] pointer-events-none"></div>
+
+      <div className="container mx-auto px-6 relative z-10 max-w-7xl">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-widest mb-4 shadow-sm backdrop-blur-md"
+          >
+            <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+            Featured Showcase
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6"
+          >
+            Crafted With{' '}
+            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Precision & Code
+            </span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-400 text-lg sm:text-xl leading-relaxed"
+          >
+            Explore a curated selection of full-stack web applications, interactive 3D interfaces, and high-performance digital solutions.
+          </motion.p>
+        </div>
+
+        {/* Search & Category Filter Controls */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-16"
+          transition={{ delay: 0.3 }}
+          className="flex flex-col md:flex-row items-center justify-between gap-4 mb-14 bg-gray-900/60 backdrop-blur-xl border border-gray-800/80 p-3 rounded-2xl shadow-xl"
         >
-          <h2 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
-            My Projects
-          </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Explore my recent works with modern interactive 3D cards
-          </p>
-          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
+          {/* Category Tabs */}
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+            {categories.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                    isActive
+                      ? 'text-white'
+                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeCategoryIndicator"
+                      className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-md shadow-indigo-500/20"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search Input */}
+          <div className="relative w-full md:w-72">
+            <svg
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search projects..."
+              className="w-full pl-10 pr-4 py-2 bg-gray-950/70 border border-gray-700/60 rounded-xl text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs bg-gray-800 px-1.5 py-0.5 rounded"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </motion.div>
 
+        {/* Loading State */}
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="relative">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-500"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="rounded-full h-8 w-8 bg-indigo-600 animate-pulse"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((n) => (
+              <div
+                key={n}
+                className="h-96 rounded-3xl bg-gray-900/40 border border-gray-800/60 animate-pulse flex flex-col p-6"
+              >
+                <div className="w-full h-48 bg-gray-800/50 rounded-2xl mb-4"></div>
+                <div className="w-3/4 h-6 bg-gray-800/60 rounded mb-2"></div>
+                <div className="w-full h-4 bg-gray-800/40 rounded mb-4"></div>
+                <div className="w-1/2 h-4 bg-gray-800/40 rounded mt-auto"></div>
               </div>
+            ))}
+          </div>
+        ) : filteredProjects.length === 0 ? (
+          /* Empty State */
+          <div className="text-center py-20 bg-gray-900/30 border border-gray-800/50 rounded-3xl p-12">
+            <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
             </div>
+            <h3 className="text-xl font-bold text-white mb-2">No Projects Found</h3>
+            <p className="text-gray-400 text-sm max-w-md mx-auto mb-6">
+              No creations matched your search criteria. Try selecting another category or clear your search term.
+            </p>
+            <button
+              onClick={() => {
+                setActiveCategory('all');
+                setSearchQuery('');
+              }}
+              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-600/30"
+            >
+              Reset Filters
+            </button>
           </div>
         ) : (
-          <div className="relative px-8">
-            <Swiper
-              modules={[Navigation, Pagination]}
-              spaceBetween={30}
-              slidesPerView={1}
-              breakpoints={{
-                640: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-              }}
-              navigation={{
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-              }}
-              pagination={{ 
-                clickable: true,
-                el: '.swiper-pagination',
-                renderBullet: function (index, className) {
-                  return `<span class="${className} bg-indigo-600"></span>`;
-                },
-              }}
-              className="mySwiper"
-            >
-              {projects.map((project, index) => (
-                <SwiperSlide key={project._id || index}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 50, rotateY: 15 }}
-                    whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.7 }}
-                    viewport={{ once: true }}
-                    whileHover={{ 
-                      y: -10, 
-                      rotateY: 5,
-                      transition: { duration: 0.3 }
-                    }}
-                    className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden shadow-2xl hover:shadow-indigo-500/20 transition-all border border-gray-700 group relative"
-                    style={{ 
-                      transformStyle: 'preserve-3d',
-                      perspective: '1000px'
-                    }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70 z-10"></div>
-                    
-                    {/* 3D Card Effect Container */}
-                    <div 
-                      className="relative h-64 overflow-hidden"
-                      style={{ transformStyle: 'preserve-3d' }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-600/10 z-0"></div>
-                      <img 
-                        src={project.imageUrl} 
-                        alt={project.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      
-                      {/* Floating elements */}
-                      <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-indigo-600/20 backdrop-blur-sm border border-indigo-500/30 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                        </svg>
+          <div className="space-y-10">
+            {/* 1. HERO SPOTLIGHT BENTO CARD (First Featured Project) */}
+            {featuredProject && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="group relative rounded-3xl bg-gradient-to-br from-gray-900/90 via-gray-900/70 to-indigo-950/40 border border-gray-800 hover:border-indigo-500/40 transition-all duration-500 shadow-2xl overflow-hidden backdrop-blur-xl"
+              >
+                {/* Glow Halo */}
+                <div className="absolute -top-32 -right-32 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl group-hover:bg-indigo-500/30 transition-all duration-700 pointer-events-none"></div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 sm:p-8 lg:p-10 items-center">
+                  {/* Left Column - Details */}
+                  <div className="lg:col-span-6 space-y-6">
+                    <div className="flex items-center gap-3">
+                      <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        ⭐ Spotlight Project
+                      </span>
+                      <span className="text-xs text-gray-500 font-mono">01 // FEATURED</span>
+                    </div>
+
+                    <h3 className="text-3xl sm:text-4xl font-extrabold text-white group-hover:text-indigo-300 transition-colors">
+                      {featuredProject.title}
+                    </h3>
+
+                    <p className="text-gray-300 text-base sm:text-lg leading-relaxed line-clamp-4">
+                      {featuredProject.description ||
+                        'A full-scale modern web application developed with robust performance, responsive design architecture, and sleek interactive user experiences.'}
+                    </p>
+
+                    {/* Tech stack tags */}
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {featuredProject.tags && featuredProject.tags.length > 0 ? (
+                        featuredProject.tags.map((tag, i) => (
+                          <span
+                            key={i}
+                            className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-indigo-300 text-xs font-mono font-medium"
+                          >
+                            #{tag}
+                          </span>
+                        ))
+                      ) : (
+                        <>
+                          <span className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-indigo-300 text-xs font-mono font-medium">
+                            #Next.js
+                          </span>
+                          <span className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-purple-300 text-xs font-mono font-medium">
+                            #React
+                          </span>
+                          <span className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-pink-300 text-xs font-mono font-medium">
+                            #TailwindCSS
+                          </span>
+                          <span className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-emerald-300 text-xs font-mono font-medium">
+                            #Node.js
+                          </span>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="flex flex-wrap items-center gap-4 pt-4">
+                      {featuredProject.link && (
+                        <a
+                          href={featuredProject.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition-all transform hover:-translate-y-0.5"
+                        >
+                          <span>Launch Live Demo</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right Column - Mac Window Browser Frame */}
+                  <div className="lg:col-span-6">
+                    <div className="relative rounded-2xl overflow-hidden bg-gray-950 border border-gray-700/70 shadow-2xl group/mockup">
+                      {/* Mac Window Header */}
+                      <div className="flex items-center justify-between px-4 py-3 bg-gray-900/90 border-b border-gray-800">
+                        <div className="flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                          <span className="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                          <span className="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                        </div>
+                        <div className="px-3 py-0.5 rounded-md bg-gray-950/80 text-[11px] font-mono text-gray-400 border border-gray-800 truncate max-w-[200px]">
+                          {featuredProject.link ? featuredProject.link.replace(/^https?:\/\//, '') : 'project-preview.app'}
+                        </div>
+                        <div className="w-10"></div>
                       </div>
-                      
-                      <div className="absolute bottom-0 left-0 p-6 z-20">
-                        <h3 className="text-2xl font-bold text-white mb-2 drop-shadow-md">{project.title}</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags?.map((tag, i) => (
-                            <motion.span 
-                              key={i} 
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              transition={{ delay: i * 0.1 }}
-                              className="px-3 py-1 bg-indigo-600/80 backdrop-blur-sm text-xs text-white rounded-full border border-indigo-400/30"
+
+                      {/* Image Frame */}
+                      <div className="relative aspect-video overflow-hidden bg-gray-900">
+                        <img
+                          src={featuredProject.imageUrl}
+                          alt={featuredProject.title}
+                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover/mockup:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-950/60 via-transparent to-transparent pointer-events-none"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* 2. MODERN SHOWCASE GRID (Remaining Projects) */}
+            {gridProjects.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {gridProjects.map((project, index) => {
+                  const isHovered = hoveredCard === index;
+                  return (
+                    <motion.div
+                      key={project._id || index}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1, duration: 0.5 }}
+                      onMouseEnter={() => setHoveredCard(index)}
+                      onMouseLeave={() => setHoveredCard(null)}
+                      className="group relative rounded-3xl bg-gray-900/70 border border-gray-800/80 hover:border-indigo-500/50 hover:bg-gray-900/90 transition-all duration-400 shadow-xl overflow-hidden flex flex-col backdrop-blur-xl"
+                    >
+                      {/* Interactive Spotlight Border Highlight */}
+                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                      {/* Mac Browser Header */}
+                      <div className="flex items-center justify-between px-4 py-2.5 bg-gray-950/90 border-b border-gray-800/80">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-rose-500/70"></span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70"></span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70"></span>
+                        </div>
+                        <span className="text-[10px] font-mono text-gray-500 truncate max-w-[150px]">
+                          {project.title.toLowerCase().replace(/\s+/g, '-')}.app
+                        </span>
+                        <div className="w-6"></div>
+                      </div>
+
+                      {/* Image Preview Container */}
+                      <div className="relative aspect-[16/10] overflow-hidden bg-gray-950">
+                        <img
+                          src={project.imageUrl}
+                          alt={project.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
+
+                        {/* Floating Action Overlay on Hover */}
+                        <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-950/40 backdrop-blur-[2px]">
+                          {project.link && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="px-4 py-2 rounded-xl bg-white text-gray-900 font-semibold text-xs flex items-center gap-1.5 shadow-xl hover:bg-gray-100 transition-all transform hover:scale-105"
                             >
-                              {tag}
-                            </motion.span>
-                          ))}
+                              <span>Live Preview</span>
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                            </a>
+                          )}
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="p-6 relative">
-                      {/* Subtle grid pattern */}
-                      <div className="absolute inset-0 opacity-10 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
-                      
-                      <p className="text-gray-300 mb-4 line-clamp-3 relative z-10">{project.description}</p>
-                      <div className="flex items-center relative z-10">
-                        <motion.a 
-                          href={project.link} 
-                          className="text-white hover:text-indigo-400 font-medium inline-flex items-center transition-colors group/link"
-                          target="_blank" rel="noreferrer"
-                          whileHover={{ x: 5 }}
-                        >
-                          View Project
-                          <svg className="w-4 h-4 ml-2 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                        </motion.a>
+
+                      {/* Card Body */}
+                      <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div className="space-y-2">
+                          <h4 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">
+                            {project.title}
+                          </h4>
+                          <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                            {project.description ||
+                              'A polished digital experience crafted with clean code and modern interface aesthetics.'}
+                          </p>
+                        </div>
+
+                        {/* Tags & Action Link */}
+                        <div className="pt-4 border-t border-gray-800/80 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 overflow-hidden">
+                            {project.tags && project.tags.length > 0 ? (
+                              project.tags.slice(0, 2).map((tag, tIdx) => (
+                                <span
+                                  key={tIdx}
+                                  className="text-[11px] px-2 py-0.5 rounded bg-gray-800 text-gray-300 font-mono"
+                                >
+                                  {tag}
+                                </span>
+                              ))
+                            ) : (
+                              <span className="text-[11px] px-2 py-0.5 rounded bg-gray-800 text-gray-400 font-mono">
+                                #FullStack
+                              </span>
+                            )}
+                          </div>
+
+                          {project.link && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 group/btn"
+                            >
+                              <span>Explore</span>
+                              <svg
+                                className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                              </svg>
+                            </a>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    
-                    {/* Glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-indigo-600/10 to-purple-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10"></div>
-                  </motion.div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            
-            {/* Custom navigation buttons */}
-            <div className="swiper-button-prev after:text-indigo-400 after:text-2xl"></div>
-            <div className="swiper-button-next after:text-indigo-400 after:text-2xl"></div>
-            <div className="swiper-pagination mt-6 relative"></div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>
-
-      <style jsx global>{`
-        @keyframes shine {
-          100% {
-            left: 125%;
-          }
-        }
-        .animate-shine {
-          animation: shine 0.75s;
-        }
-        .bg-grid-white\/\[0\.05\] {
-          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.05)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
-        }
-      `}</style>
     </section>
   );
 };
 
-export default Projects;
+export default Projects;
