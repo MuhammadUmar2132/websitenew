@@ -44,6 +44,27 @@ const seedAdminUser = async () => {
     }
 };
 
+const Photo = require('../models/photo');
+
+const seedDefaultProjects = async () => {
+    try {
+        const existing = await Photo.findOne({ title: /AL Falah Journey/i });
+        if (!existing) {
+            const defaultProject = new Photo({
+                title: "AL Falah Journey Erp",
+                description: "Developed a Travel Agency ERP system using MERN stack to manage bookings, vouchers, customers, flights, and operations.",
+                link: "https://alfalahjourney.com",
+                imageUrl: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80",
+                cloudinaryId: "seed-alfalah-1"
+            });
+            await defaultProject.save();
+            console.log('✅ Seeded AL Falah Journey Erp project.');
+        }
+    } catch (err) {
+        console.error('Error seeding project:', err.message);
+    }
+};
+
 const dbConnect = async () => {
     try {
         mongoose.set('strictQuery', false);
@@ -52,6 +73,8 @@ const dbConnect = async () => {
 
         // Auto seed or sync admin credentials from .env
         await seedAdminUser();
+        // Auto seed AL Falah Journey Erp project
+        await seedDefaultProjects();
     } catch (error) {
         console.log(`Error: ${error}`);
     }

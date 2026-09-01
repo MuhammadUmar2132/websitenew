@@ -5,8 +5,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import * as THREE from 'three';
 
+const defaultProjects = [
+  {
+    _id: "alfalah-erp-1",
+    title: "AL Falah Journey Erp",
+    description: "Developed a Travel Agency ERP system using MERN stack to manage bookings, vouchers, customers, flights, and operations.",
+    link: "https://alfalahjourney.com",
+    imageUrl: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80",
+    tags: ["MERN Stack", "React", "Node.js", "MongoDB", "Express", "ERP"]
+  }
+];
+
 const Projects = () => {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(defaultProjects);
   const [loading, setLoading] = useState(true);
   const [hoveredCard, setHoveredCard] = useState(null);
 
@@ -21,9 +32,23 @@ const Projects = () => {
         const res = await fetch(`${API_URL}/photos`);
         const data = await res.json();
         const projectList = Array.isArray(data) ? data : data?.projects || [];
-        setProjects(projectList);
+        if (projectList.length > 0) {
+          // If AL Falah is in the list, keep it first or prepend
+          const hasAlFalah = projectList.some(p => p.title?.toLowerCase().includes('al falah'));
+          if (hasAlFalah) {
+            const sorted = [...projectList].sort((a, b) => 
+              a.title?.toLowerCase().includes('al falah') ? -1 : 1
+            );
+            setProjects(sorted);
+          } else {
+            setProjects([defaultProjects[0], ...projectList]);
+          }
+        } else {
+          setProjects(defaultProjects);
+        }
       } catch (error) {
         console.error('Error fetching projects:', error);
+        setProjects(defaultProjects);
       } finally {
         setLoading(false);
       }
