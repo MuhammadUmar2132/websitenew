@@ -161,40 +161,21 @@ const Projects = () => {
 
       <div className="container mx-auto px-6 relative z-10 max-w-7xl">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-widest mb-4 shadow-sm backdrop-blur-md"
-          >
-            <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-            Featured Showcase
-          </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6"
-          >
-            Crafted With{' '}
-            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Precision & Code
-            </span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-300 text-lg sm:text-xl leading-relaxed"
-          >
-            Explore a curated selection of full-stack web applications, interactive 3D interfaces, and high-performance digital solutions.
-          </motion.p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+            My Projects
+          </h2>
+          <p className="text-lg text-gray-300 max-w-xl mx-auto">
+            Explore my recent works and web applications
+          </p>
+          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
+        </motion.div>
 
         {/* Loading State */}
         {loading ? (
@@ -242,10 +223,10 @@ const Projects = () => {
                   {/* Left Column - Details */}
                   <div className="lg:col-span-6 space-y-6">
                     <div className="flex items-center gap-3">
-                      <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-                        ⭐ Spotlight Project
+                      <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
+                        Featured Project
                       </span>
-                      <span className="text-xs text-gray-400 font-mono">01 // FEATURED</span>
+                      <span className="text-xs text-gray-400 font-mono">01 // SPOTLIGHT</span>
                     </div>
 
                     <h3 className="text-3xl sm:text-4xl font-extrabold text-white group-hover:text-indigo-300 transition-colors">
