@@ -160,21 +160,19 @@ const Projects = () => {
       <div className="absolute bottom-1/4 -right-48 w-96 h-96 bg-purple-600/15 rounded-full blur-[128px] pointer-events-none"></div>
 
       <div className="container mx-auto px-6 relative z-10 max-w-7xl">
-        {/* Section Header */}
+        {/* Section Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
-            My Projects
+          <h2 className="text-4xl font-bold text-white mb-4">
+            My <span className="text-indigo-400">Projects</span>
           </h2>
-          <p className="text-lg text-gray-300 max-w-xl mx-auto">
-            Explore my recent works and web applications
+          <p className="text-gray-300 max-w-2xl mx-auto">
+            I provide end-to-end solutions for web and mobile development, ensuring performance, design, and scalability.
           </p>
-          <div className="w-20 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
         </motion.div>
 
         {/* Loading State */}
