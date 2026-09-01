@@ -167,11 +167,11 @@ const Projects = () => {
   const gridProjects = filteredProjects.length > 1 ? filteredProjects.slice(1) : [];
 
   return (
-    <section id="projects" className="py-24 bg-gray-950 text-gray-100 relative overflow-hidden">
+    <section id="projects" className="py-24 bg-gray-900 text-gray-100 relative overflow-hidden">
       {/* Background 3D Canvas */}
       <div
         ref={threeContainerRef}
-        className="absolute inset-0 z-0 opacity-30 pointer-events-none"
+        className="absolute inset-0 z-0 opacity-25 pointer-events-none"
       />
 
       {/* Decorative Glow Orbs */}
@@ -209,7 +209,7 @@ const Projects = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg sm:text-xl leading-relaxed"
+            className="text-gray-300 text-lg sm:text-xl leading-relaxed"
           >
             Explore a curated selection of full-stack web applications, interactive 3D interfaces, and high-performance digital solutions.
           </motion.p>
@@ -221,7 +221,7 @@ const Projects = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="flex flex-col md:flex-row items-center justify-between gap-4 mb-14 bg-gray-900/60 backdrop-blur-xl border border-gray-800/80 p-3 rounded-2xl shadow-xl"
+          className="flex flex-col md:flex-row items-center justify-between gap-4 mb-14 bg-gray-800/80 backdrop-blur-xl border border-gray-700/60 p-3 rounded-2xl shadow-xl"
         >
           {/* Category Tabs */}
           <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
@@ -234,7 +234,7 @@ const Projects = () => {
                   className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     isActive
                       ? 'text-white'
-                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
                   }`}
                 >
                   {isActive && (
@@ -270,12 +270,12 @@ const Projects = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search projects..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-950/70 border border-gray-700/60 rounded-xl text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-gray-900/90 border border-gray-700 rounded-xl text-sm text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs bg-gray-800 px-1.5 py-0.5 rounded"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs bg-gray-700 px-1.5 py-0.5 rounded"
               >
                 ✕
               </button>
@@ -289,18 +289,18 @@ const Projects = () => {
             {[1, 2, 3, 4, 5, 6].map((n) => (
               <div
                 key={n}
-                className="h-96 rounded-3xl bg-gray-900/40 border border-gray-800/60 animate-pulse flex flex-col p-6"
+                className="h-96 rounded-3xl bg-gray-800/40 border border-gray-700/60 animate-pulse flex flex-col p-6"
               >
-                <div className="w-full h-48 bg-gray-800/50 rounded-2xl mb-4"></div>
-                <div className="w-3/4 h-6 bg-gray-800/60 rounded mb-2"></div>
-                <div className="w-full h-4 bg-gray-800/40 rounded mb-4"></div>
-                <div className="w-1/2 h-4 bg-gray-800/40 rounded mt-auto"></div>
+                <div className="w-full h-48 bg-gray-700/50 rounded-2xl mb-4"></div>
+                <div className="w-3/4 h-6 bg-gray-700/60 rounded mb-2"></div>
+                <div className="w-full h-4 bg-gray-700/40 rounded mb-4"></div>
+                <div className="w-1/2 h-4 bg-gray-700/40 rounded mt-auto"></div>
               </div>
             ))}
           </div>
         ) : filteredProjects.length === 0 ? (
           /* Empty State */
-          <div className="text-center py-20 bg-gray-900/30 border border-gray-800/50 rounded-3xl p-12">
+          <div className="text-center py-20 bg-gray-800/40 border border-gray-700/60 rounded-3xl p-12">
             <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -329,7 +329,7 @@ const Projects = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="group relative rounded-3xl bg-gradient-to-br from-gray-900/90 via-gray-900/70 to-indigo-950/40 border border-gray-800 hover:border-indigo-500/40 transition-all duration-500 shadow-2xl overflow-hidden backdrop-blur-xl"
+                className="group relative rounded-3xl bg-gradient-to-br from-gray-800/90 via-gray-800/70 to-indigo-950/40 border border-gray-700/80 hover:border-indigo-500/50 transition-all duration-500 shadow-2xl overflow-hidden backdrop-blur-xl"
               >
                 {/* Glow Halo */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl group-hover:bg-indigo-500/30 transition-all duration-700 pointer-events-none"></div>
@@ -341,7 +341,7 @@ const Projects = () => {
                       <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                         ⭐ Spotlight Project
                       </span>
-                      <span className="text-xs text-gray-500 font-mono">01 // FEATURED</span>
+                      <span className="text-xs text-gray-400 font-mono">01 // FEATURED</span>
                     </div>
 
                     <h3 className="text-3xl sm:text-4xl font-extrabold text-white group-hover:text-indigo-300 transition-colors">
@@ -359,23 +359,23 @@ const Projects = () => {
                         featuredProject.tags.map((tag, i) => (
                           <span
                             key={i}
-                            className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-indigo-300 text-xs font-mono font-medium"
+                            className="px-3 py-1 rounded-lg bg-gray-700/70 border border-gray-600/70 text-indigo-300 text-xs font-mono font-medium"
                           >
                             #{tag}
                           </span>
                         ))
                       ) : (
                         <>
-                          <span className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-indigo-300 text-xs font-mono font-medium">
+                          <span className="px-3 py-1 rounded-lg bg-gray-700/70 border border-gray-600/70 text-indigo-300 text-xs font-mono font-medium">
                             #Next.js
                           </span>
-                          <span className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-purple-300 text-xs font-mono font-medium">
+                          <span className="px-3 py-1 rounded-lg bg-gray-700/70 border border-gray-600/70 text-purple-300 text-xs font-mono font-medium">
                             #React
                           </span>
-                          <span className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-pink-300 text-xs font-mono font-medium">
+                          <span className="px-3 py-1 rounded-lg bg-gray-700/70 border border-gray-600/70 text-pink-300 text-xs font-mono font-medium">
                             #TailwindCSS
                           </span>
-                          <span className="px-3 py-1 rounded-lg bg-gray-800/80 border border-gray-700 text-emerald-300 text-xs font-mono font-medium">
+                          <span className="px-3 py-1 rounded-lg bg-gray-700/70 border border-gray-600/70 text-emerald-300 text-xs font-mono font-medium">
                             #Node.js
                           </span>
                         </>
@@ -402,15 +402,15 @@ const Projects = () => {
 
                   {/* Right Column - Mac Window Browser Frame */}
                   <div className="lg:col-span-6">
-                    <div className="relative rounded-2xl overflow-hidden bg-gray-950 border border-gray-700/70 shadow-2xl group/mockup">
+                    <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-700/80 shadow-2xl group/mockup">
                       {/* Mac Window Header */}
-                      <div className="flex items-center justify-between px-4 py-3 bg-gray-900/90 border-b border-gray-800">
+                      <div className="flex items-center justify-between px-4 py-3 bg-gray-850 border-b border-gray-700/80">
                         <div className="flex items-center gap-2">
                           <span className="w-3 h-3 rounded-full bg-rose-500/80"></span>
                           <span className="w-3 h-3 rounded-full bg-amber-500/80"></span>
                           <span className="w-3 h-3 rounded-full bg-emerald-500/80"></span>
                         </div>
-                        <div className="px-3 py-0.5 rounded-md bg-gray-950/80 text-[11px] font-mono text-gray-400 border border-gray-800 truncate max-w-[200px]">
+                        <div className="px-3 py-0.5 rounded-md bg-gray-900 text-[11px] font-mono text-gray-300 border border-gray-700 truncate max-w-[200px]">
                           {featuredProject.link ? featuredProject.link.replace(/^https?:\/\//, '') : 'project-preview.app'}
                         </div>
                         <div className="w-10"></div>
@@ -423,7 +423,7 @@ const Projects = () => {
                           alt={featuredProject.title}
                           className="w-full h-full object-cover object-top transition-transform duration-700 group-hover/mockup:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-950/60 via-transparent to-transparent pointer-events-none"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent pointer-events-none"></div>
                       </div>
                     </div>
                   </div>
@@ -435,7 +435,6 @@ const Projects = () => {
             {gridProjects.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {gridProjects.map((project, index) => {
-                  const isHovered = hoveredCard === index;
                   return (
                     <motion.div
                       key={project._id || index}
@@ -445,32 +444,32 @@ const Projects = () => {
                       transition={{ delay: index * 0.1, duration: 0.5 }}
                       onMouseEnter={() => setHoveredCard(index)}
                       onMouseLeave={() => setHoveredCard(null)}
-                      className="group relative rounded-3xl bg-gray-900/70 border border-gray-800/80 hover:border-indigo-500/50 hover:bg-gray-900/90 transition-all duration-400 shadow-xl overflow-hidden flex flex-col backdrop-blur-xl"
+                      className="group relative rounded-3xl bg-gray-800/80 border border-gray-700/70 hover:border-indigo-500/50 hover:bg-gray-800/95 transition-all duration-400 shadow-xl overflow-hidden flex flex-col backdrop-blur-xl"
                     >
                       {/* Interactive Spotlight Border Highlight */}
                       <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
                       {/* Mac Browser Header */}
-                      <div className="flex items-center justify-between px-4 py-2.5 bg-gray-950/90 border-b border-gray-800/80">
+                      <div className="flex items-center justify-between px-4 py-2.5 bg-gray-900/95 border-b border-gray-700/70">
                         <div className="flex items-center gap-1.5">
                           <span className="w-2.5 h-2.5 rounded-full bg-rose-500/70"></span>
                           <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70"></span>
                           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70"></span>
                         </div>
-                        <span className="text-[10px] font-mono text-gray-500 truncate max-w-[150px]">
+                        <span className="text-[10px] font-mono text-gray-400 truncate max-w-[150px]">
                           {project.title.toLowerCase().replace(/\s+/g, '-')}.app
                         </span>
                         <div className="w-6"></div>
                       </div>
 
                       {/* Image Preview Container */}
-                      <div className="relative aspect-[16/10] overflow-hidden bg-gray-950">
+                      <div className="relative aspect-[16/10] overflow-hidden bg-gray-900">
                         <img
                           src={project.imageUrl}
                           alt={project.title}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
 
                         {/* Floating Action Overlay on Hover */}
                         <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-950/40 backdrop-blur-[2px]">
@@ -496,26 +495,26 @@ const Projects = () => {
                           <h4 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">
                             {project.title}
                           </h4>
-                          <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                          <p className="text-gray-300 text-sm leading-relaxed line-clamp-2">
                             {project.description ||
                               'A polished digital experience crafted with clean code and modern interface aesthetics.'}
                           </p>
                         </div>
 
                         {/* Tags & Action Link */}
-                        <div className="pt-4 border-t border-gray-800/80 flex items-center justify-between">
+                        <div className="pt-4 border-t border-gray-700/70 flex items-center justify-between">
                           <div className="flex items-center gap-1.5 overflow-hidden">
                             {project.tags && project.tags.length > 0 ? (
                               project.tags.slice(0, 2).map((tag, tIdx) => (
                                 <span
                                   key={tIdx}
-                                  className="text-[11px] px-2 py-0.5 rounded bg-gray-800 text-gray-300 font-mono"
+                                  className="text-[11px] px-2 py-0.5 rounded bg-gray-700 text-gray-200 font-mono"
                                 >
                                   {tag}
                                 </span>
                               ))
                             ) : (
-                              <span className="text-[11px] px-2 py-0.5 rounded bg-gray-800 text-gray-400 font-mono">
+                              <span className="text-[11px] px-2 py-0.5 rounded bg-gray-700 text-gray-300 font-mono">
                                 #FullStack
                               </span>
                             )}
