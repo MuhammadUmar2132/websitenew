@@ -9,15 +9,25 @@ const cors = require("cors");
 
 const app = express();
 
+const allowedOrigins = [
+  "https://umar-portfolio-frontend.vercel.app",
+  "https://websitenew-g6yv.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
+
 // ✅ Use CORS before all middleware
 app.use(
   cors({
-    origin: [
-      "https://websitenew-g6yv.vercel.app", // ✅ your Vercel frontend
-      "http://localhost:3000"               // ✅ for local dev
-    ],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
