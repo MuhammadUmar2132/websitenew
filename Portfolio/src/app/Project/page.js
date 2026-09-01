@@ -8,20 +8,11 @@ import * as THREE from 'three';
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
   const [hoveredCard, setHoveredCard] = useState(null);
 
   const threeContainerRef = useRef(null);
   const frameRef = useRef(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8009';
-
-  const categories = [
-    { id: 'all', label: 'All Projects' },
-    { id: 'web', label: 'Web Applications' },
-    { id: 'fullstack', label: 'Full Stack' },
-    { id: 'ui', label: 'UI / UX Design' },
-  ];
 
   // Fetch projects from API
   useEffect(() => {
@@ -149,25 +140,15 @@ const Projects = () => {
     };
   }, []);
 
-  // Filter projects by search and category
-  const filteredProjects = projects.filter((p) => {
-    const titleMatch = p.title?.toLowerCase().includes(searchQuery.toLowerCase());
-    const descMatch = p.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesSearch = titleMatch || descMatch;
-
-    if (!matchesSearch) return false;
-    if (activeCategory === 'all') return true;
-    if (activeCategory === 'web') return p.title?.toLowerCase().includes('web') || p.tags?.some((t) => t.toLowerCase().includes('web') || t.toLowerCase().includes('react') || t.toLowerCase().includes('next'));
-    if (activeCategory === 'fullstack') return p.title?.toLowerCase().includes('stack') || p.tags?.some((t) => t.toLowerCase().includes('node') || t.toLowerCase().includes('express') || t.toLowerCase().includes('api'));
-    if (activeCategory === 'ui') return p.title?.toLowerCase().includes('ui') || p.title?.toLowerCase().includes('design') || p.tags?.some((t) => t.toLowerCase().includes('ui') || t.toLowerCase().includes('tailwind'));
-    return true;
-  });
-
-  const featuredProject = filteredProjects.length > 0 ? filteredProjects[0] : null;
-  const gridProjects = filteredProjects.length > 1 ? filteredProjects.slice(1) : [];
+  const featuredProject = projects.length > 0 ? projects[0] : null;
+  const gridProjects = projects.length > 1 ? projects.slice(1) : [];
 
   return (
-    <section id="projects" className="py-24 bg-gray-900 text-gray-100 relative overflow-hidden">
+    <section 
+      id="projects" 
+      className="py-24 text-gray-100 relative overflow-hidden"
+      style={{ backgroundColor: 'rgb(17, 24, 39)' }}
+    >
       {/* Background 3D Canvas */}
       <div
         ref={threeContainerRef}
@@ -215,74 +196,6 @@ const Projects = () => {
           </motion.p>
         </div>
 
-        {/* Search & Category Filter Controls */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="flex flex-col md:flex-row items-center justify-between gap-4 mb-14 bg-gray-800/80 backdrop-blur-xl border border-gray-700/60 p-3 rounded-2xl shadow-xl"
-        >
-          {/* Category Tabs */}
-          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-            {categories.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                    isActive
-                      ? 'text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-                  }`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeCategoryIndicator"
-                      className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-md shadow-indigo-500/20"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{cat.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search Input */}
-          <div className="relative w-full md:w-72">
-            <svg
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search projects..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-900/90 border border-gray-700 rounded-xl text-sm text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs bg-gray-700 px-1.5 py-0.5 rounded"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </motion.div>
-
         {/* Loading State */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -298,7 +211,7 @@ const Projects = () => {
               </div>
             ))}
           </div>
-        ) : filteredProjects.length === 0 ? (
+        ) : projects.length === 0 ? (
           /* Empty State */
           <div className="text-center py-20 bg-gray-800/40 border border-gray-700/60 rounded-3xl p-12">
             <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-4">
@@ -306,19 +219,10 @@ const Projects = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">No Projects Found</h3>
-            <p className="text-gray-400 text-sm max-w-md mx-auto mb-6">
-              No creations matched your search criteria. Try selecting another category or clear your search term.
+            <h3 className="text-xl font-bold text-white mb-2">Projects Coming Soon</h3>
+            <p className="text-gray-400 text-sm max-w-md mx-auto">
+              Exciting projects and applications are currently in development and will be showcased here soon.
             </p>
-            <button
-              onClick={() => {
-                setActiveCategory('all');
-                setSearchQuery('');
-              }}
-              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-indigo-600/30"
-            >
-              Reset Filters
-            </button>
           </div>
         ) : (
           <div className="space-y-10">
